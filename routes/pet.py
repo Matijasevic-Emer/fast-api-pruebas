@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter,Query 
+from fastapi.responses import JSONResponse
 from typing import List
 from models import Pet
 
@@ -21,7 +22,7 @@ async def get_pet(pet_id: int):
 @router.post("/pets", response_model=Pet, tags=["Pets"])
 async def create_pet(pet: Pet):
     pets_db.append(pet)
-    return pet
+    return JSONResponse(content={'messagge':'Creado exitosamente','pet':pet.to_dict()})
 
 @router.put("/pets/{pet_id}", response_model=Pet, tags=["Pets"])
 async def update_pet(pet_id: int, updated_pet: Pet):

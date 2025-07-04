@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 from datetime import date
 
@@ -24,14 +24,20 @@ class Clinic(BaseModel):
 
 class Pet(BaseModel):
     id: int
-    name: str
-    species: str
-    breed: str
+    name: str = Field(default='Ruffian',min_length=3, max_length=40)
+    species: str = Field(default='Gato/Perro/Tortuga',min_length=3)
+    breed: str = Field(default='Mestizo/Doberman/ShortTail/etc',min_length=3)
     sex: str
     birth_date: date
     owner_name: str
     owner_phone: str
     sex: Optional[Literal["Male", "Female"]] = None  # Opcional, con valor por defecto None
+
+    def to_dict(self):
+        return {
+           "id": self.id,
+           "name": self.name 
+        }
 
 class MedicalVisit(BaseModel):
     id: int
