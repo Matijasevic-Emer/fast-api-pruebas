@@ -1,6 +1,33 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Literal
 from datetime import date
+from fastapi.security import HTTPBearer
+from fastapi import Request,HTTPException
+from user_jwt import *
+
+bearer_scheme = HTTPBearer()
+
+class BearerJWT(HTTPBearer):
+    async def __call__(self, request: Request):
+        auth = await super().__call__(request)
+        data = validateToken(auth.credentials)
+        if data['email'] == '':
+            raise HTTPException(status_code=403, detail='email vacio')
+
+class User(BaseModel):
+    id: int
+    first_name: Optional[str]
+    last_name: Optional[str]
+    email: str
+    password: str
+
+    def to_dict(self):
+        return {
+           "id": self.id,
+           "email": self.email 
+        }
+
+
 
 class Veterinarian(BaseModel):
     id: int

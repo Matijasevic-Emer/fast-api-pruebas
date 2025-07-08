@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from routes import clinic, pet
+from routes import clinic, pet, user
 from homeview import homeview
 
 app = FastAPI(
@@ -12,6 +12,7 @@ app = FastAPI(
 # Registrar rutas
 app.include_router(clinic.router, prefix="/api")
 app.include_router(pet.router, prefix="/api")
+app.include_router(user.router, prefix="/api")
 
 # @app.get("/")
 # async def root():

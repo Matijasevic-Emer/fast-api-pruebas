@@ -1,15 +1,15 @@
-from fastapi import APIRouter,Query 
+from fastapi import APIRouter,Query,Depends,Security
 from fastapi.responses import JSONResponse
 from typing import List
-from models import Pet
+from models import Pet, BearerJWT, bearer_scheme
 
 router = APIRouter()
 
 # Simulación de base de datos
 pets_db = []
 
-@router.get("/pets", response_model=List[Pet], tags=["Pets"])
-async def get_pets():
+@router.get("/pets", response_model=List[Pet], tags=["Pets"], dependencies=[Depends(BearerJWT)])
+async def get_pets(  auth: str = Security(bearer_scheme) ):
     return pets_db
 
 @router.get("/pets/{pet_id}", response_model=Pet, tags=["Pets"])
